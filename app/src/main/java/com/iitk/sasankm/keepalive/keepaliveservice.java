@@ -379,7 +379,7 @@ public class keepaliveservice extends Service {
                         url = new URL("http://authenticate.iitk.ac.in/netaccess/connstatus.html");
                         urlConnection = (HttpURLConnection) url.openConnection();
                         urlConnection.setRequestMethod("GET");
-
+                        urlConnection.setConnectTimeout(5000);
                         urlConnection.connect();
 
                          ini = new BufferedReader(
