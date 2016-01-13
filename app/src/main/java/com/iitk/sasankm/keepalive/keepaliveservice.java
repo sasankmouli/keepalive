@@ -238,6 +238,7 @@ public class keepaliveservice extends Service {
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("User-Agent", USER_AGENT);
+                urlConnection.setConnectTimeout(5000);
                 urlConnection.connect();
             }
             catch(IOException a) {
