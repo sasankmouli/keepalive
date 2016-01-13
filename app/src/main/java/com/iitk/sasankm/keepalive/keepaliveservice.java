@@ -241,6 +241,14 @@ public class keepaliveservice extends Service {
                 urlConnection.setConnectTimeout(5000);
                 urlConnection.connect();
             }
+            catch(java.net.SocketTimeoutException ste){
+                Log.d("Keepalive", "URL Timed out, will try switching to Ironport");
+                file.delete();
+                t_file.delete();
+                Refresh();
+                ste.printStackTrace();
+                return;
+            }
             catch(IOException a) {
 
                 Log.d("Keepalive","No connection");
