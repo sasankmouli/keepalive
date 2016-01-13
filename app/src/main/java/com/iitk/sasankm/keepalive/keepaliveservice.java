@@ -50,7 +50,7 @@ public class keepaliveservice extends Service {
 
     public static int status  = -1;
 
-    private static long UPDATE_INTERVAL = INTERVAL_LONG;  //default
+    private static long UPDATE_INTERVAL = INTERVAL_SHORT;  //default
 
     private static Timer timer ;
     private final String USER_AGENT = "Mozilla/5.0";
@@ -266,7 +266,7 @@ public class keepaliveservice extends Service {
                         h.printStackTrace();
                     }
 
-                        changeTimer(INTERVAL_SHORT);
+                        //changeTimer(INTERVAL_SHORT);
                 }
 
 
@@ -294,8 +294,8 @@ public class keepaliveservice extends Service {
                     status = 1;
 
 
-                    if (UPDATE_INTERVAL == INTERVAL_SHORT)
-                        changeTimer(INTERVAL_LONG);
+                    //if (UPDATE_INTERVAL == INTERVAL_SHORT)
+                        //changeTimer(INTERVAL_LONG);
 
 
                     try {
@@ -317,8 +317,8 @@ public class keepaliveservice extends Service {
 
                 if(status!=0) {
                     status = 0;
-                    if (UPDATE_INTERVAL == INTERVAL_LONG)
-                        changeTimer(INTERVAL_SHORT);
+                    //if (UPDATE_INTERVAL == INTERVAL_LONG)
+                        //changeTimer(INTERVAL_SHORT);
 
                     try {
                         MainActivity.mHandler.post(new Runnable() {
@@ -370,13 +370,29 @@ public class keepaliveservice extends Service {
             Log.d("Keepalive", "File not found");
 
             try {
+
+                int code;
+
+                try{
                 Log.d("Keepalive", "Attempting to connect ... ");
+                    url = new URL("http://google.com");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
-
+                urlConnection.setConnectTimeout(5000);
+                    urlConnection.setReadTimeout(5000);
+                    Log.d("Keepalive","About to Connect");
                 urlConnection.connect();
-                int code = urlConnection.getResponseCode();
+                 code = urlConnection.getResponseCode();
+                    Log.d("Keepalive","Status Code"+Integer.toString(code));
                 urlConnection.disconnect();
+            }
+                catch(java.net.SocketTimeoutException ste){
+                    Log.d("Keepalive", "URL Timed out, will try switching to Fortinet");
+
+                    Refresh();
+                    ste.printStackTrace();
+                    return;
+                }
 
                 if(code!=303 && code!=307) {
 
@@ -413,8 +429,8 @@ public class keepaliveservice extends Service {
 
                                 status = 3;
 
-                                if (UPDATE_INTERVAL == INTERVAL_LONG)
-                                    changeTimer(INTERVAL_SHORT);
+                                //if (UPDATE_INTERVAL == INTERVAL_LONG)
+                                    //changeTimer(INTERVAL_SHORT);
 
 
                                 try {
@@ -462,8 +478,8 @@ public class keepaliveservice extends Service {
 
                                 status = 2;
 
-                                if (UPDATE_INTERVAL == INTERVAL_LONG)
-                                    changeTimer(INTERVAL_SHORT);
+                                //if (UPDATE_INTERVAL == INTERVAL_LONG)
+                                    //changeTimer(INTERVAL_SHORT);
 
 
                                 try {
@@ -854,8 +870,8 @@ public class keepaliveservice extends Service {
                         status = 1;
                         urlstring = s;
 
-                        if (UPDATE_INTERVAL == INTERVAL_SHORT)
-                            changeTimer(INTERVAL_LONG);
+                        //if (UPDATE_INTERVAL == INTERVAL_SHORT)
+                            //changeTimer(INTERVAL_LONG);
 
 
                         try {
@@ -886,8 +902,8 @@ public class keepaliveservice extends Service {
 
                 if(status!=0) {
                     status = 0;
-                    if (UPDATE_INTERVAL == INTERVAL_LONG)
-                        changeTimer(INTERVAL_SHORT);
+                    //if (UPDATE_INTERVAL == INTERVAL_LONG)
+                        //changeTimer(INTERVAL_SHORT);
 
                     try {
                         MainActivity.mHandler.post(new Runnable() {
@@ -987,12 +1003,12 @@ public class keepaliveservice extends Service {
         Log.d("Keepalive", "Timer stopped...");
     }
 
-    private void changeTimer(long time)
+   /* private void changeTimer(long time)
     {
         _shutdownService();
         UPDATE_INTERVAL = time;
         _startService();
-    }
+    }*/
 
     @Override
     public void onDestroy() {
