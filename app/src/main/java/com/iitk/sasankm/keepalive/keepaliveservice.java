@@ -96,7 +96,7 @@ public class keepaliveservice extends Service {
 
                     }
                 }, 1000, UPDATE_INTERVAL);
-        Log.d("Keepalive", "Timer started....");
+        //Log.d("Keepalive", "Timer started....");
     }
 
     @Override
@@ -109,7 +109,7 @@ public class keepaliveservice extends Service {
     public int onStartCommand(Intent workIntent, int flags, int startId) {
         // Gets data from the incoming Intent
 
-        Log.d("Keepalive", "Service started");
+        //Log.d("Keepalive", "Service started");
 
         File u_file = new File(this.getFilesDir(),"username");
         File p_file = new File(this.getFilesDir(),"password");
@@ -157,7 +157,7 @@ public class keepaliveservice extends Service {
         });
 
 
-        Log.d("Keepalive", "Entered main");
+        //Log.d("Keepalive", "Entered main");
 
 
         try {
@@ -176,7 +176,7 @@ public class keepaliveservice extends Service {
 
             if(!file.exists() || !t_file.exists()) {
 
-                Log.d("Keepalive", "URL files don't exist");
+                //Log.d("Keepalive", "URL files don't exist");
                 throw new NullPointerException();
 
             }
@@ -195,14 +195,14 @@ public class keepaliveservice extends Service {
             br.close();
             t_br.close();
 
-            Log.d("Keepalive", "TimeStamp: " + tString);
+            //Log.d("Keepalive", "TimeStamp: " + tString);
 
            try{
                 Long.parseLong(tString);
             }
             catch(NumberFormatException asdas)
             {
-                Log.d("Keepalive", "Bad timestamp: " + tString);
+                //Log.d("Keepalive", "Bad timestamp: " + tString);
                 t_file.delete();
                 asdas.printStackTrace();
                 Refresh();
@@ -211,7 +211,7 @@ public class keepaliveservice extends Service {
 
             if(SystemClock.elapsedRealtime() > Long.parseLong(tString)+1800*1000)
             {
-                Log.d("Keepalive", "URL too old");
+                //Log.d("Keepalive", "URL too old");
                 file.delete();
                 t_file.delete();
                 Refresh();
@@ -221,11 +221,11 @@ public class keepaliveservice extends Service {
 
             try {
                 url = new URL(dataString);
-                Log.d("Keepalive", "URL: "+dataString);
+                //Log.d("Keepalive", "URL: "+dataString);
             } catch (MalformedURLException | NullPointerException e) {
 
                 // stopForeground(true);
-                Log.d("Keepalive", "Bad URL: "+ dataString);
+                //Log.d("Keepalive", "Bad URL: "+ dataString);
 
                 file.delete();
                 Refresh();
@@ -234,7 +234,7 @@ public class keepaliveservice extends Service {
 
             try {
 
-                Log.d("Keepalive", "Attempting to refresh ... ");
+                //Log.d("Keepalive", "Attempting to refresh ... ");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("User-Agent", USER_AGENT);
@@ -242,7 +242,7 @@ public class keepaliveservice extends Service {
                 urlConnection.connect();
             }
             catch(java.net.SocketTimeoutException ste){
-                Log.d("Keepalive", "URL Timed out, will try switching to Ironport");
+                //Log.d("Keepalive", "URL Timed out, will try switching to Ironport");
                 file.delete();
                 t_file.delete();
                 Refresh();
@@ -251,7 +251,7 @@ public class keepaliveservice extends Service {
             }
             catch(IOException a) {
 
-                Log.d("Keepalive","No connection");
+                //Log.d("Keepalive","No connection");
                 if(status !=0) {
                     status = 0;
                     try {
@@ -283,7 +283,7 @@ public class keepaliveservice extends Service {
                // in = new BufferedInputStream(urlConnection.getInputStream());
 
                  //in.read(b,0,2000);
-                Log.d("Keepalive", "Refresh Successful at " + Long.toString(SystemClock.elapsedRealtime()));
+                //Log.d("Keepalive", "Refresh Successful at " + Long.toString(SystemClock.elapsedRealtime()));
                // in.close();
 
                 if(urlConnection.getResponseCode()!=200)
@@ -313,7 +313,7 @@ public class keepaliveservice extends Service {
 
             }
             catch(IOException a) {
-                Log.d("Keepalive", "Keepalive URL is dead");
+                //Log.d("Keepalive", "Keepalive URL is dead");
 
                 if(status!=0) {
                     status = 0;
@@ -362,32 +362,32 @@ public class keepaliveservice extends Service {
             }
             catch(IOException | NullPointerException ee)
             {
-                Log.d("Keepalive", "File I/O Exception");
+                //Log.d("Keepalive", "File I/O Exception");
             }
 
 
         } catch (IOException | NullPointerException e) {
-            Log.d("Keepalive", "File not found");
+            //Log.d("Keepalive", "File not found");
 
             try {
 
                 int code;
 
                 try{
-                Log.d("Keepalive", "Attempting to connect ... ");
+                //Log.d("Keepalive", "Attempting to connect ... ");
                     url = new URL("http://google.com");
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setConnectTimeout(5000);
                     urlConnection.setReadTimeout(5000);
-                    Log.d("Keepalive","About to Connect");
+                    //Log.d("Keepalive","About to Connect");
                 urlConnection.connect();
                  code = urlConnection.getResponseCode();
-                    Log.d("Keepalive","Status Code"+Integer.toString(code));
+                    //Log.d("Keepalive","Status Code"+Integer.toString(code));
                 urlConnection.disconnect();
             }
                 catch(java.net.SocketTimeoutException ste){
-                    Log.d("Keepalive", "URL Timed out, will try switching to Fortinet");
+                    //Log.d("Keepalive", "URL Timed out, will try switching to Fortinet");
 
                     Refresh();
                     ste.printStackTrace();
@@ -396,7 +396,7 @@ public class keepaliveservice extends Service {
 
                 if(code!=303 && code!=307) {
 
-                    Log.d("Keepalive",Long.toString(SystemClock.elapsedRealtime()) +  ": Already Logged In");
+                    //Log.d("Keepalive",Long.toString(SystemClock.elapsedRealtime()) +  ": Already Logged In");
 
 
                     try {
@@ -422,7 +422,7 @@ public class keepaliveservice extends Service {
                          m = magic.matcher(response.toString());
                         if (m.find()) {
 
-                            Log.d("Keepalive", "Logged in to Cisco");
+                            //Log.d("Keepalive", "Logged in to Cisco");
                             urlConnection.disconnect();
 
                             if(status!=3) {
@@ -454,7 +454,7 @@ public class keepaliveservice extends Service {
 
                     }
                     catch(IOException a) {
-                        Log.d("Keepalive","Could not reach Cisco server");
+                        //Log.d("Keepalive","Could not reach Cisco server");
 
                         try {
 
@@ -607,7 +607,7 @@ public class keepaliveservice extends Service {
 
                         String str = response.toString();
 
-                        Log.d("Keepalive", "Server Response: " + str);
+                        //Log.d("Keepalive", "Server Response: " + str);
 
                         urlConnection.disconnect();
 
@@ -624,7 +624,7 @@ public class keepaliveservice extends Service {
                          m = magic.matcher(str);
                         if(m.find()) {
 
-                            Log.d("Keepalive", "Wrong Credentials");
+                            //Log.d("Keepalive", "Wrong Credentials");
 
                             Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
@@ -654,7 +654,7 @@ public class keepaliveservice extends Service {
                         m = magic.matcher(str);
 
                         if(m.find()){
-                            Log.d("Keepalive", "Cisco: Logged in successfully");
+                            //Log.d("Keepalive", "Cisco: Logged in successfully");
                         }
 
 
@@ -673,7 +673,7 @@ public class keepaliveservice extends Service {
                     catch(IOException aa)
                     {
 
-                        Log.d("Keepalive","I/O Exception at Cisco Gateway");
+                        //Log.d("Keepalive","I/O Exception at Cisco Gateway");
                         aa.printStackTrace();
                         return;
                     }
@@ -693,11 +693,11 @@ public class keepaliveservice extends Service {
                 {
                     String str = urlConnection.getHeaderField("Location");
 
-                    Log.d("Keepalive", "Auth location: " + str);
+                    //Log.d("Keepalive", "Auth location: " + str);
                     urlConnection.disconnect();
 
                     url = new URL(str);
-                    Log.d("Keepalive", "Insecure URL: "+ "http://"+url.getHost()+url.getPath());
+                    //Log.d("Keepalive", "Insecure URL: "+ "http://"+url.getHost()+url.getPath());
                     url = new URL("http://"+url.getHost()+url.getPath());
 
                     try {
@@ -708,7 +708,7 @@ public class keepaliveservice extends Service {
 
 
                        urlConnection.connect();
-                        Log.d("Keepalive", "Status Code: " + Integer.toString(urlConnection.getResponseCode()));
+                        //Log.d("Keepalive", "Status Code: " + Integer.toString(urlConnection.getResponseCode()));
 
                         in = new BufferedInputStream(urlConnection.getInputStream());
 
@@ -718,7 +718,7 @@ public class keepaliveservice extends Service {
                     }
                     catch (IOException bmw)
                     {
-                        Log.d("Keepalive", "I/O Exception at Ironport Login");
+                        //Log.d("Keepalive", "I/O Exception at Ironport Login");
 
                         bmw.printStackTrace();
                     }
@@ -731,7 +731,7 @@ public class keepaliveservice extends Service {
 
                     String str = urlConnection.getHeaderField("Location");
                     String s = "hull";
-                    Log.d("Keepalive", "Auth location: " + str);
+                    //Log.d("Keepalive", "Auth location: " + str);
                     urlConnection.disconnect();
 
                     url = new URL(str);
@@ -748,22 +748,22 @@ public class keepaliveservice extends Service {
 
                     str = new String(b, "UTF-8");
 
-                    Log.d("Keepalive", str);
+                    //Log.d("Keepalive", str);
 
                     magic = Pattern.compile("value=\"([0-9a-f]+)\"");
                     m = magic.matcher(str);
 
                     if (m.find()) {
-                        // Log.d("Keepalive", "Found magic string");
+                        // //Log.d("Keepalive", "Found magic string");
                         s = m.group(1);
                     }
 
 
-                    Log.d("Keepalive", "Magic string: " + s);
+                    //Log.d("Keepalive", "Magic string: " + s);
 
                     urlConnection.disconnect();
 
-                    Log.d("Keepalive", url.getProtocol() + "://" + url.getHost() + ":" + url.getPort());
+                    //Log.d("Keepalive", url.getProtocol() + "://" + url.getHost() + ":" + url.getPort());
 
                     url = new URL(url.getProtocol() + "://" + url.getHost() + ":" + url.getPort());
                     urlConnection = (HttpURLConnection) url.openConnection();
@@ -801,14 +801,14 @@ public class keepaliveservice extends Service {
                         in.read(b, 0, 2000);
                         in.close();
                     } catch (IOException aa) {
-                        Log.d("Keepalive", "Wrong Credentials");
+                        //Log.d("Keepalive", "Wrong Credentials");
 
                         aa.printStackTrace();
                     }
 
                     str = new String(b, "UTF-8");
 
-                    Log.d("Keepalive", str);
+                    //Log.d("Keepalive", str);
 
                     magic = Pattern.compile("location.href=\"(.+?)\"");
                     m = magic.matcher(str);
@@ -839,7 +839,7 @@ public class keepaliveservice extends Service {
                     }
                     s = m.group(1);
 
-                    Log.d("Keepalive", "Keepalive URL: " + s);
+                    //Log.d("Keepalive", "Keepalive URL: " + s);
 
                     try {
 
@@ -866,7 +866,7 @@ public class keepaliveservice extends Service {
                         bw.flush();
                         bw.close();
 
-                        Log.d("Keepalive", "Files written successfully at " + Long.toString(SystemClock.elapsedRealtime()));
+                        //Log.d("Keepalive", "Files written successfully at " + Long.toString(SystemClock.elapsedRealtime()));
                         status = 1;
                         urlstring = s;
 
@@ -886,7 +886,7 @@ public class keepaliveservice extends Service {
                             h.printStackTrace();
                         }
                     } catch (IOException bla) {
-                        Log.d("Keepalive", "Files could not be created");
+                        //Log.d("Keepalive", "Files could not be created");
                         bla.printStackTrace();
                     }
 
@@ -898,7 +898,7 @@ public class keepaliveservice extends Service {
             }
             catch(IOException oo)
             {
-                Log.d("Keepalive", "Could not connect");
+                //Log.d("Keepalive", "Could not connect");
 
                 if(status!=0) {
                     status = 0;
@@ -929,7 +929,7 @@ public class keepaliveservice extends Service {
 
                 }
                 catch(IOException | NullPointerException z) {
-                    Log.d("Keepalive", "Can't read timestamp, writing current timestamp");
+                    //Log.d("Keepalive", "Can't read timestamp, writing current timestamp");
 
                     try {
                         t_fw = new FileWriter(t_file.getAbsoluteFile(), false);
@@ -939,7 +939,7 @@ public class keepaliveservice extends Service {
 
 
                     } catch (IOException la) {
-                        Log.d("Keepalive", "***FATAL***: File I/O failed");
+                        //Log.d("Keepalive", "***FATAL***: File I/O failed");
                         stopSelf();
 
                     }
@@ -1000,7 +1000,7 @@ public class keepaliveservice extends Service {
     private void _shutdownService()
     {
         if (timer != null) timer.cancel();
-        Log.d("Keepalive", "Timer stopped...");
+        //Log.d("Keepalive", "Timer stopped...");
     }
 
    /* private void changeTimer(long time)
